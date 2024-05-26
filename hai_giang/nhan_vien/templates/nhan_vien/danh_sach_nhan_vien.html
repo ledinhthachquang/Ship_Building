@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Danh sách Nhân viên</title>
+    <style>
+        .input-form {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            padding: 10px;
+        }
+
+        .input-form label {
+            margin-right: 10px;
+        }
+
+        .input-form input, .input-form select {
+            margin-right: 10px;
+        }
+
+        .table-container {
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <h1>Danh sách Nhân viên</h1>
+    <a href="{% url 'trang_chu_quan_ly' %}">Quay về trang chính</a><br>
+
+    <form method="POST" class="input-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Thêm Nhân viên</button>
+    </form>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Mã nhân viên</th>
+                <th>Tên nhân viên</th>
+                <th>Quê quán</th>
+                <th>Số CCCD</th>
+                <th>Địa chỉ thường trú</th>
+                <th>Chức vụ</th>
+                <th>Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for nhan_vien in nhan_vien_list %}
+            <tr>
+                <td>{{ nhan_vien.ma_nhan_vien }}</td>
+                <td>{{ nhan_vien.ten_nhan_vien }}</td>
+                <td>{{ nhan_vien.que_quan }}</td>
+                <td>{{ nhan_vien.so_cccd }}</td>
+                <td>{{ nhan_vien.dia_chi_thuong_tru }}</td>
+                <td>{{ nhan_vien.get_chuc_vu_display }}</td>
+                <td>
+                    <a href="{% url 'sua_nhan_vien' nhan_vien.ma_nhan_vien %}">Sửa</a>
+                    <form action="{% url 'xoa_nhan_vien' nhan_vien.ma_nhan_vien %}" method="POST" style="display:inline;" onsubmit="return confirm('Bạn có chắc chắn muốn xóa nhân viên này?');">
+                        {% csrf_token %}
+                        <button type="submit">Xóa</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
+</html>

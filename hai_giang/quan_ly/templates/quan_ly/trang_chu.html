@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Trang chủ quản lý doanh thu</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar {
+            background-color: #9eafb4;
+            padding: 10px 20px;
+            color: white;
+            display: flex;
+            justify-content: space-between; 
+            align-items: center;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+        }
+
+        .navbar a:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            margin: 20px;
+        }
+
+        .dashboard {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            width: 22%;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            text-align: center;
+            text-decoration: none;
+            color: white;
+        }
+
+        .card:hover {
+            opacity: 0.9;
+        }
+
+        .card h2 {
+            margin-top: 0;
+            font-size: 24px;
+        }
+
+        .card p {
+            font-size: 16px;
+        }
+        .card--invoices {
+            background: linear-gradient(to bottom right, #cc5500, #d97745); 
+        }
+
+        .card--reports {
+            background: linear-gradient(to bottom right, #199ee6, #0fbde4);
+        }
+
+        .card--history {
+            background: linear-gradient(to bottom right, #2a8d2a, #4caa4c); 
+        }
+
+        .card--errors {
+            background: linear-gradient(to bottom right, #a0306c, #c0458c); 
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        .filter-form {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div>
+            <strong>Trang chủ quản lý doanh thu</strong>
+        </div>
+        <div>
+            <a href="{% url 'trang_chu_quan_ly' %}">Trang chủ</a>
+            <a href="{% url 'quan_ly_doanh_nghiep' %}">Quản lý doanh nghiệp</a>
+            <a href="{% url 'quan_ly_khach_hang' %}">Quản lý khách hàng</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="dashboard">
+            <a href="{% url 'danh_sach_hoa_don' %}" class="card card--invoices">
+                <h2>Quản lý hóa đơn</h2>
+                <p>Quản lý lập, xử lý và in hóa đơn</p>
+            </a>
+            <a href="{% url 'danh_sach_nhan_vien' %}" class="card card--reports">
+                <h2>Quản lý nhân viên</h2>
+                <p>Xem, thêm thông tin nhân viên</p>
+            </a>
+            <a href="{% url 'danh_sach_cham_cong' %}" class="card card--history">
+                <h2>Quản lý chấm công</h2>
+                <p>Xem lịch sử chấm công và tiền lương nhân viên</p>
+            </a>
+            <a href="{% url 'danh_sach_tau' %}" class="card card--errors">
+                <h2>Quản lý vật tư</h2>
+                <p>Quản lý tàu và vật tư của tàu</p>
+            </a>
+        </div>
+
+        <div class="filter-form">
+            <form method="get">
+                <label for="thang">Tháng:</label>
+                <select name="thang" id="thang">
+                    <option value="">Chọn tháng</option>
+                    {% for month in months %}
+                        <option value="{{ month }}"{% if thang == month|stringformat:"s" %} selected{% endif %}>Tháng {{ month }}</option>
+                    {% endfor %}
+                </select>
+
+                <label for="nam">Năm:</label>
+                <input type="number" name="nam" id="nam" value="{{ nam }}" placeholder="Nhập năm">
+                
+                <button type="submit">Lọc</button>
+            </form>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Số hóa đơn</th>
+                    <th>Ngày lập</th>
+                    <th>Tiền</th>
+                    <th>Tiền thuế</th>
+                    <th>Thành tiền</th>
+                    <th>Chi phí lương</th>
+                    <th>Doanh thu</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for data in hoa_don_data %}
+                    <tr>
+                        <td>{{ data.hoa_don.id }}</td>
+                        <td>{{ data.hoa_don.ngay_lap }}</td>
+                        <td>{{ data.tong_tien }}</td>
+                        <td>{{ data.tien_thue }}</td>
+                        <td>{{ data.tien_sau_thue }}</td>
+                        <td>{{ data.chi_phi_luong }}</td>
+                        <td>{{ data.doanh_thu }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="4">Tổng cộng:</td>
+                    <td>{{ tong_thu_tu_hoa_don }}</td>
+                    <td>{{ tong_luong_nhan_vien }}</td>
+                    <td>{{ tong_doanh_thu }}</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</body>
+</html>

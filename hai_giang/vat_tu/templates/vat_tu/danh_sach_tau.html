@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Danh sách Tàu</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        .input-form {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            padding: 10px;
+        }
+        .input-form label {
+            margin-right: 10px;
+        }
+        .input-form input, .input-form select {
+            margin-right: 10px;
+        }
+        .table-container {
+            margin-top: 20px;
+        }
+        .separator {
+            border-top: 2px solid black;
+            margin: 20px 0;
+        }
+        .tau-row {
+            background-color: #f2f2f2;
+            margin-bottom: 20px;
+        }
+        .vattu-table {
+            background-color: #e6f7ff;
+        }
+    </style>
+</head>
+<body>
+    <h1>Danh sách Tàu</h1>
+    <a href="{% url 'them_tau' %}">Thêm Tàu</a>
+    <a href="{% url 'them_vat_tu' %}">Thêm Vật Tư</a>
+    <a href="{% url 'trang_chu_quan_ly' %}">Quay về trang chính</a><br>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Mã Tàu</th>
+                    <th>Tên Tàu</th>
+                    <th>Diễn giải</th>
+                    <th>Tiền Trước Thuế</th>
+                    <th>Thuế Suất</th>
+                    <th>Tiền Thuế</th>
+                    <th>Tiền Sau Thuế</th>
+                    <th>Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for tau in tau_list %}
+                <tr id="{{ tau.ma_tau }}" class="tau-row">
+                    <td>{{ tau.ma_tau }}</td>
+                    <td>{{ tau.ten_tau }}</td>
+                    <td>{{ tau.dien_giai }}</td>
+                    <td>{{ tau.tien_truoc_thue }}</td>
+                    <td>
+                        <form method="POST" action="{% url 'cap_nhat_thue_suat' tau.ma_tau %}">
+                            {% csrf_token %}
+                            <select name="thue_suat" onchange="this.form.submit()">
+                                <option value="8.00" {% if tau.thue_suat == 8.00 %}selected{% endif %}>8%</option>
+                                <option value="10.00" {% if tau.thue_suat == 10.00 %}selected{% endif %}>10%</option>
+                            </select>
+                        </form>
+                    </td>
+                    <td>{{ tau.tien_thue }}</td>
+                    <td>{{ tau.tien_sau_thue }}</td>
+                    <td>
+                        <a href="{% url 'sua_tau' tau.ma_tau %}">Sửa</a>
+                        <form action="{% url 'xoa_tau' tau.ma_tau %}" method="POST" style="display:inline;" onsubmit="return confirm('Bạn có chắc chắn muốn xóa tàu này?');">
+                            {% csrf_token %}
+                            <button type="submit">Xóa</button>
+                        </form>
+                    </td>
+                </tr>
+                <tr class="tau-row">
+                    <td colspan="8">
+                        <table class="vattu-table">
+                            <thead>
+                                <tr>
+                                    <th>Tên vật tư</th>
+                                    <th>Khối lượng</th>
+                                    <th>Đơn giá</th>
+                                    <th>Hệ số công</th>
+                                    <th>Thành tiền</th>
+                                    <th>Hành động</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for vat_tu in tau.vattu.all %}
+                                <tr>
+                                    <td>{{ vat_tu.ten_vat_tu }}</td>
+                                    <td>{{ vat_tu.khoi_luong }}</td>
+                                    <td>{{ vat_tu.don_gia }}</td>
+                                    <td>{{ vat_tu.he_so_cong }}</td>
+                                    <td>{{ vat_tu.tien_vat_tu }}</td>
+                                    <td>
+                                        <a href="{% url 'sua_vat_tu' vat_tu.id %}">Sửa</a>
+                                        <form action="{% url 'xoa_vat_tu' vat_tu.id %}" method="POST" style="display:inline;" onsubmit="return confirm('Bạn có chắc chắn muốn xóa vật tư này?');">
+                                            {% csrf_token %}
+                                            <button type="submit">Xóa</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr class="separator"><td colspan="8"></td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Xóa Chấm công</title>
+</head>
+<body>
+    <h1>Xóa Chấm công</h1>
+    <p>Bạn có chắc chắn muốn xóa chấm công này không?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Xóa</button>
+    </form>
+    <a href="{% url 'danh_sach_cham_cong' %}">Quay lại danh sách Chấm công</a>
+</body>
+</html>

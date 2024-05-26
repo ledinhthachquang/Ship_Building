@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Thêm Hóa đơn</title>
+    <script>
+        function updateTax() {
+            const tienTruocThue = parseFloat(document.getElementById('id_tien_truoc_thue').value);
+            const thueSuat = parseFloat(document.getElementById('id_thue_suat').value);
+            if (!isNaN(tienTruocThue) && !isNaN(thueSuat)) {
+                const tienThue = tienTruocThue * thueSuat / 100;
+                const tienSauThue = tienTruocThue + tienThue;
+                document.getElementById('id_tien_thue').value = tienThue.toFixed(2);
+                document.getElementById('id_tien_sau_thue').value = tienSauThue.toFixed(2);
+            }
+        }
+
+        function toggleTauFields() {
+            const newTauFields = document.getElementById('new-tau-fields');
+            const selectTauContainer = document.getElementById('select-tau-container');
+            const newTauRadio = document.getElementById('new-tau');
+            const existingTauRadio = document.getElementById('existing-tau');
+
+            if (newTauRadio.checked) {
+                newTauFields.style.display = 'block';
+                selectTauContainer.style.display = 'none';
+            } else {
+                newTauFields.style.display = 'none';
+                selectTauContainer.style.display = 'block';
+            }
+        }
+
+        function populateTauFields(select) {
+            if (select.value !== '') {
+                fetch(`/hoa_don/api/get_tau/${select.value}/`)
+                    .then(response => response.json())
+                    .then(data => {
+                        document.querySelector('input[name="ten_tau"]').value = data.ten_tau;
+                        document.querySelector('textarea[name="dien_giai"]').value = data.dien_giai;
+                        document.querySelector('input[name="tien_truoc_thue"]').value = data.tien_truoc_thue;
+                        document.querySelector('select[name="thue_suat"]').value = data.thue_suat;
+                        document.querySelector('input[name="tien_thue"]').value = data.tien_thue;
+                        document.querySelector('input[name="tien_sau_thue"]').value = data.tien_sau_thue;
+                    });
+            }
+        }
+
+        window.onload = function() {
+            document.getElementById('id_tien_truoc_thue').addEventListener('input', updateTax);
+            document.getElementById('id_thue_suat').addEventListener('change', updateTax);
+            toggleTauFields(); // initialize the fields state
+        };
+    </script>
+</head>
+<body>
+    <h1>Thêm Hóa đơn</h1>
+    <form method="post">
+        {% csrf_token %}
+        <h2>Thông tin Hóa đơn</h2>
+        {{ hoa_don_form.as_p }}
+        <h2>Thông tin Khách hàng</h2>
+        {{ khach_hang_form.as_p }}
+        <h2>Thông tin Tàu</h2>
+        <div>
+            <label for="tau-choice">Bạn muốn:</label>
+            <input type="radio" id="new-tau" name="tau_choice" value="new" checked onclick="toggleTauFields()"> Nhập tàu mới
+            <input type="radio" id="existing-tau" name="tau_choice" value="existing" onclick="toggleTauFields()"> Chọn tàu từ database
+        </div>
+        <div id="select-tau-container" style="display:none;">
+            <label for="select-tau">Chọn tàu:</label>
+            <select id="select-tau" name="tau_id" onchange="populateTauFields(this)">
+                <option value="">--Chọn tàu--</option>
+                {% for tau in tau_list %}
+                    <option value="{{ tau.ma_tau }}">{{ tau.ten_tau }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div id="new-tau-fields">
+            {{ tau_form.as_p }}
+        </div>
+        <button type="submit">Lưu Hóa đơn</button>
+    </form>
+    <a href="{% url 'danh_sach_hoa_don' %}">Quay lại danh sách Hóa đơn</a>
+</body>
+</html>

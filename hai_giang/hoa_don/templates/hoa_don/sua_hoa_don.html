@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sửa Hóa đơn</title>
+    <script>
+        function updateTax() {
+            const tienTruocThue = parseFloat(document.getElementById('id_tien_truoc_thue').value);
+            const thueSuat = parseFloat(document.getElementById('id_thue_suat').value);
+            if (!isNaN(tienTruocThue) && !isNaN(thueSuat)) {
+                const tienThue = tienTruocThue * thueSuat / 100;
+                const tienSauThue = tienTruocThue + tienThue;
+                document.getElementById('id_tien_thue').value = tienThue.toFixed(2);
+                document.getElementById('id_tien_sau_thue').value = tienSauThue.toFixed(2);
+            }
+        }
+
+        window.onload = function() {
+            document.getElementById('id_tien_truoc_thue').addEventListener('input', updateTax);
+            document.getElementById('id_thue_suat').addEventListener('change', updateTax);
+        };
+    </script>
+</head>
+<body>
+    <h1>Sửa Hóa đơn</h1>
+    <form method="post">
+        {% csrf_token %}
+        <h2>Thông tin Hóa đơn</h2>
+        {{ hoa_don_form.as_p }}
+
+        <h2>Thông tin Khách hàng</h2>
+        {{ khach_hang_form.as_p }}
+
+        <h2>Thông tin Tàu</h2>
+        {{ tau_form.as_p }}
+
+        <button type="submit">Lưu Hóa đơn</button>
+    </form>
+</body>
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Trang chủ Hóa đơn</title>
+    <style>
+        
+        .search-filter-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .filter-form {
+            flex: 1;
+            margin-right: 20px;
+        }
+
+        .search-form {
+            flex: 1;
+            text-align: right;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+    </style>
+    <script>
+        function confirmDelete(id) {
+            if (confirm('Bạn có chắc chắn muốn xóa hóa đơn này không?')) {
+                document.getElementById('delete-form-' + id).submit();
+            }
+        }
+
+        window.onload = function() {
+            var thang = "{{ thang }}";
+            var nam = "{{ nam }}";
+
+            if (thang) {
+                document.getElementById("thang").value = thang;
+            }
+            if (nam) {
+                document.getElementById("nam").value = nam;
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Trang chủ Hóa đơn</h1>
+    <p>Đây là trang chủ của hóa đơn.</p>
+    
+    <a href="{% url 'them_hoa_don' %}">Thêm Hóa đơn</a>
+    <a href="#" onclick="window.print();">In Hóa đơn</a>
+    <a href="{% url 'trang_chu_quan_ly' %}">Quay về trang chính</a><br>
+
+    <h2>Danh sách Hóa đơn</h2>
+
+    <div class="search-filter-container">
+        <form method="get" class="filter-form">
+            <label for="thang">Tháng:</label>
+            <select name="thang" id="thang">
+                <option value="">Chọn tháng</option>
+                {% for month in months %}
+                    <option value="{{ month }}">Tháng {{ month }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="nam">Năm:</label>
+            <input type="number" name="nam" id="nam" value="{{ nam }}" placeholder="Nhập năm">
+            
+            <button type="submit">Lọc</button>
+        </form>
+
+        <form method="get" class="search-form">
+            <label for="search">Tìm kiếm:</label>
+            <input type="text" name="search" id="search" value="{{ search_query }}" placeholder="Tìm theo tên tàu hoặc số hóa đơn">
+            <button type="submit">Tìm</button>
+        </form>
+    </div>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Số hóa đơn</th>
+                <th>Ngày lập</th>
+                <th>Tên đơn vị mua</th>
+                <th>Mã số thuế</th>
+                <th>Tên tàu</th>
+                <th>Tiền</th>
+                <th>Tiền thuế</th>
+                <th>Thành tiền</th>
+                <th>Hình thức thanh toán</th>
+                <th>Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for chi_tiet in chi_tiet_hoa_don %}
+                <tr>
+                    <td>{{ chi_tiet.hoa_don.id }}</td>
+                    <td>{{ chi_tiet.hoa_don.ngay_lap }}</td>
+                    <td>{{ chi_tiet.khach_hang.ten_cong_ty }}</td>
+                    <td>{{ chi_tiet.khach_hang.ma_so_thue }}</td>
+                    <td>{{ chi_tiet.tau.ten_tau }}</td>
+                    <td>{{ chi_tiet.tau.tien_truoc_thue }}</td>
+                    <td>{{ chi_tiet.tau.tien_thue }}</td>
+                    <td>{{ chi_tiet.tau.tien_sau_thue }}</td>
+                    <td>{{ chi_tiet.hoa_don.hinh_thuc_thanh_toan }}</td>
+                    <td>
+                        <a href="{% url 'sua_hoa_don' chi_tiet.id %}">Sửa</a>
+                        <form id="delete-form-{{ chi_tiet.id }}" action="{% url 'xoa_hoa_don' chi_tiet.id %}" method="POST" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="button" onclick="confirmDelete('{{ chi_tiet.id }}')">Xóa</button>
+                        </form>
+                        <a href="{% url 'in_hoa_don' chi_tiet.id %}">In</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="5">Tổng cộng:</td>
+                <td>{{ tong_tien }}</td>
+                <td>{{ tong_thue }}</td>
+                <td>{{ tong_thanh_tien }}</td>
+                <td></td>
+            </tr>
+        </tfoot>
+    </table>
+</body>
+</html>

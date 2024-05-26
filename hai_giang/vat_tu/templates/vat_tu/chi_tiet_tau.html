@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chi tiết Tàu</title>
+</head>
+<body>
+    <h1>Chi tiết Tàu: {{ tau.ten_tau }}</h1>
+    <p>Diễn giải: {{ tau.dien_giai }}</p>
+    <p>Tiền trước thuế: {{ tau.tien_truoc_thue }}</p>
+    <p>Thuế suất: {{ tau.thue_suat }}</p>
+    <p>Tiền thuế: {{ tau.tien_thue }}</p>
+    <p>Tiền sau thuế: {{ tau.tien_sau_thue }}</p>
+
+    <h2>Quyết toán Vật tư</h2>
+    <a href="{% url 'them_vat_tu' tau.ma_tau %}">Thêm Vật tư</a>
+    <table>
+        <thead>
+            <tr>
+                <th>Tên Vật tư</th>
+                <th>Diễn giải</th>
+                <th>Số lượng</th>
+                <th>Giá tiền</th>
+                <th>Thành tiền</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for qt in quyet_toan_vat_tu %}
+            <tr>
+                <td>{{ qt.vat_tu.ten_vat_tu }}</td>
+                <td>{{ qt.vat_tu.dien_giai }}</td>
+                <td>{{ qt.vat_tu.so_luong }}</td>
+                <td>{{ qt.vat_tu.so_tien }}</td>
+                <td>{{ qt.thanh_tien }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{% url 'danh_sach_tau' %}">Quay lại danh sách Tàu</a>
+</body>
+</html>

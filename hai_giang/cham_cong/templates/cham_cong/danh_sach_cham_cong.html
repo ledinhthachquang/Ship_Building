@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Danh sách Chấm công</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        .container {
+            display: flex;
+        }
+        .left, .right {
+            flex: 1;
+            padding: 20px;
+        }
+        .form-container {
+            margin-bottom: 20px;
+        }
+        .form-horizontal input {
+            display: inline-block;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Danh sách Chấm công</h1>
+    <a href="{% url 'trang_chu_quan_ly' %}">Quay về trang chính</a><br>
+
+    <div class="form-container">
+        <h2>Thêm Chấm công</h2>
+        <form method="post" class="form-horizontal">
+            {% csrf_token %}
+            {{ form.nhan_vien.label }} {{ form.nhan_vien }}
+            {{ form.tau.label }} {{ form.tau }}
+            {{ form.ngay_bat_dau.label }} {{ form.ngay_bat_dau }}
+            {{ form.ngay_ket_thuc.label }} {{ form.ngay_ket_thuc }}
+            {{ form.so_ngay_chu_nhat.label }} {{ form.so_ngay_chu_nhat }}
+            {{ form.so_ngay_thu_bay.label }} {{ form.so_ngay_thu_bay }}
+            <button type="submit">Lưu</button>
+        </form>
+    </div>
+    <div class="container">
+        <div class="left">
+            <h2>Nhân viên</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tên nhân viên</th>
+                        <th>Mã số</th>
+                        <th>Chức vụ</th>
+                        <th>Lương chức vụ</th>
+                        <th>Tổng lương</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for nhan_vien in nhan_vien_list %}
+                        <tr>
+                            <td>{{ nhan_vien.ten_nhan_vien }}</td>
+                            <td>{{ nhan_vien.ma_nhan_vien }}</td>
+                            <td>{{ nhan_vien.chuc_vu }}</td>
+                            <td>
+                                {% if nhan_vien.chuc_vu == 'Nhân viên' %}
+                                    300000
+                                {% elif nhan_vien.chuc_vu == 'Kỹ sư' %}
+                                    550000
+                                {% else %}
+                                    850000
+                                {% endif %}
+                            </td>
+                            <td>{{ nhan_vien.tong_luong }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="right">
+            <h2>Chi tiết Chấm công</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nhân viên</th>
+                        <th>Tàu</th>
+                        <th>Ngày bắt đầu</th>
+                        <th>Ngày kết thúc</th>
+                        <th>Số giờ làm việc</th>
+                        <th>Chức vụ đảm nhận</th>
+                        <th>Số công</th>
+                        <th>Lương</th>
+                        <th>Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cham_cong in cham_cong_list %}
+                        <tr>
+                            <td>{{ cham_cong.nhan_vien.ten_nhan_vien }}</td>
+                            <td>{{ cham_cong.tau.ten_tau }}</td>
+                            <td>{{ cham_cong.ngay_bat_dau }}</td>
+                            <td>{{ cham_cong.ngay_ket_thuc }}</td>
+                            <td>{{ cham_cong.so_gio_lam_viec }}</td>
+                            <td>{{ cham_cong.nhan_vien.chuc_vu }}</td>
+                            <td>{{ cham_cong.tong_cong }}</td>
+                            <td>{{ cham_cong.luong }}</td>
+                            <td>
+                                <a href="{% url 'sua_cham_cong' cham_cong.ma_cham_cong %}">Sửa</a>
+                                <a href="{% url 'xoa_cham_cong' cham_cong.ma_cham_cong %}" onclick="return confirm('Bạn có chắc chắn muốn xóa chấm công này không?');">Xóa</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

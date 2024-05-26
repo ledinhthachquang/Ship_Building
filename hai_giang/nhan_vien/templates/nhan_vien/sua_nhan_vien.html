@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sửa Nhân viên</title>
+</head>
+<body>
+    <h1>Sửa Nhân viên</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Lưu thay đổi</button>
+    </form>
+</body>
+</html>

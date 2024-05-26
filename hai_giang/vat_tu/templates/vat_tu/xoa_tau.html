@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Xóa Tàu</title>
+</head>
+<body>
+    <h1>Xóa Tàu</h1>
+    <p>Bạn có chắc chắn muốn xóa tàu "{{ tau.ten_tau }}"?</p>
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit">Xóa</button>
+    </form>
+    <a href="{% url 'danh_sach_tau' %}">Quay lại danh sách Tàu</a>
+</body>
+</html>

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+head>
+    <title>Xóa Nhân viên</title>
+</head>
+<body>
+    <h1>Xóa Nhân viên</h1>
+    <p>Bạn có chắc chắn muốn xóa nhân viên "{{ nhan_vien.ten_nhan_vien }}" không?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Xóa</button>
+        <a href="{% url 'danh_sach_nhan_vien' %}">Hủy</a>
+    </form>
+</body>
+</html>
+    

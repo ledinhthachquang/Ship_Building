@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>In Hóa đơn</title>
+    <style>
+        .invoice-container {
+            width: 80%;
+            margin: 0 auto;
+            border: 1px solid #000;
+            padding: 20px;
+        }
+
+        .invoice-header {
+            text-align: center;
+        }
+
+        .invoice-body {
+            margin-top: 20px;
+        }
+
+        .invoice-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .invoice-table, .invoice-table th, .invoice-table td {
+            border: 1px solid #000;
+        }
+
+        .invoice-table th, .invoice-table td {
+            padding: 8px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="invoice-container">
+        <div class="invoice-header">
+            <h1>Hóa Đơn</h1>
+            <p>Số: {{ chi_tiet_hoa_don.hoa_don.id }}</p>
+        </div>
+        <div class="invoice-body">
+            <h2>Thông tin Khách hàng</h2>
+            <p>Tên công ty: {{ chi_tiet_hoa_don.khach_hang.ten_cong_ty }}</p>
+            <p>Mã số thuế: {{ chi_tiet_hoa_don.khach_hang.ma_so_thue }}</p>
+            <p>Địa chỉ: {{ chi_tiet_hoa_don.khach_hang.dia_chi }}</p>
+
+            <h2>Thông tin Tàu</h2>
+            <p>Tên tàu: {{ chi_tiet_hoa_don.tau.ten_tau }}</p>
+            <p>Diễn giải: {{ chi_tiet_hoa_don.tau.dien_giai }}</p>
+
+            <h2>Chi tiết Hóa đơn</h2>
+            <table class="invoice-table">
+                <thead>
+                    <tr>
+                        <th>Tiền trước thuế</th>
+                        <th>Thuế suất</th>
+                        <th>Tiền thuế</th>
+                        <th>Tiền sau thuế</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ chi_tiet_hoa_don.tau.tien_truoc_thue }}</td>
+                        <td>{{ chi_tiet_hoa_don.tau.thue_suat }}</td>
+                        <td>{{ chi_tiet_hoa_don.tau.tien_thue }}</td>
+                        <td>{{ chi_tiet_hoa_don.tau.tien_sau_thue }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

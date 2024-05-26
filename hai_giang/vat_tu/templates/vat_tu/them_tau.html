@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thêm Tàu</title>
+</head>
+<body>
+    <h1>Thêm Tàu</h1>
+    <form method="POST" action="{% url 'them_tau' %}">
+        {% csrf_token %}
+        <label for="ten_tau">Tên tàu:</label>
+        <input type="text" name="ten_tau" id="ten_tau"><br>
+        <label for="dien_giai">Diễn giải:</label>
+        <textarea name="dien_giai" id="dien_giai"></textarea><br>
+        <button type="submit">Thêm Tàu</button>
+    </form>
+    <a href="{% url 'danh_sach_tau' %}">Quay lại danh sách Tàu</a>
+</body>
+</html>

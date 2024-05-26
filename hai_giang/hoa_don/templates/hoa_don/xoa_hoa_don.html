@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Xóa Hóa đơn</title>
+</head>
+<body>
+    <h1>Xóa Hóa đơn</h1>
+    <p>Bạn có chắc chắn muốn xóa hóa đơn này không?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Đồng ý</button>
+        <a href="{% url 'trang_chu' %}">Hủy bỏ</a>
+    </form>
+</body>
+</html>
