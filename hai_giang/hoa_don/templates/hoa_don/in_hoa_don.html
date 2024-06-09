@@ -41,13 +41,13 @@
         </div>
         <div class="invoice-body">
             <h2>Thông tin Khách hàng</h2>
-            <p>Tên công ty: {{ chi_tiet_hoa_don.khach_hang.ten_cong_ty }}</p>
-            <p>Mã số thuế: {{ chi_tiet_hoa_don.khach_hang.ma_so_thue }}</p>
-            <p>Địa chỉ: {{ chi_tiet_hoa_don.khach_hang.dia_chi }}</p>
+            <p>Tên công ty: {{ chi_tiet_hoa_don.hoa_don.khach_hang.ten_cong_ty }}</p>
+            <p>Mã số thuế: {{ chi_tiet_hoa_don.hoa_don.khach_hang.ma_so_thue }}</p>
+            <p>Địa chỉ: {{ chi_tiet_hoa_don.hoa_don.khach_hang.dia_chi }}</p>
 
             <h2>Thông tin Tàu</h2>
-            <p>Tên tàu: {{ chi_tiet_hoa_don.tau.ten_tau }}</p>
-            <p>Diễn giải: {{ chi_tiet_hoa_don.tau.dien_giai }}</p>
+            <p>Tên tàu: {{ chi_tiet_hoa_don.hoa_don.tau.ten_tau }}</p>
+            <p>Diễn giải: {{ chi_tiet_hoa_don.hoa_don.tau.dien_giai }}</p>
 
             <h2>Chi tiết Hóa đơn</h2>
             <table class="invoice-table">
@@ -61,10 +61,10 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>{{ chi_tiet_hoa_don.tau.tien_truoc_thue }}</td>
-                        <td>{{ chi_tiet_hoa_don.tau.thue_suat }}</td>
-                        <td>{{ chi_tiet_hoa_don.tau.tien_thue }}</td>
-                        <td>{{ chi_tiet_hoa_don.tau.tien_sau_thue }}</td>
+                        <td>{{ chi_tiet_hoa_don.hoa_don.tau.tien_truoc_thue }}</td>
+                        <td>{{ chi_tiet_hoa_don.hoa_don.tau.thue_suat }}</td>
+                        <td>{{ chi_tiet_hoa_don.hoa_don.tau.tien_thue }}</td>
+                        <td>{{ chi_tiet_hoa_don.hoa_don.tau.tien_sau_thue }}</td>
                     </tr>
                 </tbody>
             </table>

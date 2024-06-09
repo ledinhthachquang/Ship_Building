@@ -3,51 +3,182 @@
 <head>
     <title>Danh sách Tàu</title>
     <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            margin-bottom: 20px;
+            width: 100%;
+            background-color: #3498db;
+            color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 2em;
+            text-align: center;
+            color: #fff;
+        }
+
+        .back-button {
+            position: absolute;
+            left: 20px;
+            display: inline-block;
+            padding: 10px;
+            background-color: #3498db;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .back-button:hover {
+            background-color: #2980b9;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .nav-buttons a {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-buttons a:hover {
+            background-color: #2980b9;
+        }
+
+        .table-container {
+            margin-top: 20px;
+            width: 100%;
+            max-width: 1200px;
+            overflow: auto;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 20px;
         }
+
         table, th, td {
-            border: 1px solid black;
+            border: 1px solid #ddd;
         }
+
         th, td {
-            padding: 10px;
+            padding: 15px;
             text-align: left;
         }
-        .input-form {
-            display: flex;
-            flex-direction: row;
-            align-items: flex-start;
-            padding: 10px;
+
+        th {
+            background-color: #3498db;
+            color: #fff;
         }
-        .input-form label {
-            margin-right: 10px;
-        }
-        .input-form input, .input-form select {
-            margin-right: 10px;
-        }
-        .table-container {
-            margin-top: 20px;
-        }
-        .separator {
-            border-top: 2px solid black;
-            margin: 20px 0;
-        }
+
         .tau-row {
-            background-color: #f2f2f2;
-            margin-bottom: 20px;
+            background-color: #f9f9f9;
         }
+
         .vattu-table {
             background-color: #e6f7ff;
+            border-radius: 5px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .actions a, .actions button {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 5px;
+            color: #fff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .actions a {
+            background-color: #2ecc71;
+        }
+
+        .actions a:hover {
+            background-color: #27ae60;
+        }
+
+        .actions button {
+            background-color: #e74c3c;
+            border: none;
+            cursor: pointer;
+        }
+
+        .actions button:hover {
+            background-color: #c0392b;
+        }
+
+        .separator {
+            border-top: 2px solid #ddd;
+            margin: 20px 0;
+        }
+
+        select {
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        .row-highlight {
+            background-color: #f1c40f;
+        }
+
+        .cell-highlight {
+            background-color: #e74c3c;
+            color: #fff;
         }
     </style>
 </head>
 <body>
-    <h1>Danh sách Tàu</h1>
-    <a href="{% url 'them_tau' %}">Thêm Tàu</a>
-    <a href="{% url 'them_vat_tu' %}">Thêm Vật Tư</a>
-    <a href="{% url 'trang_chu_quan_ly' %}">Quay về trang chính</a><br>
+    <a class="back-button" href="{% url 'trang_chu_quan_ly' %}">⬅</a>
+    <div class="header">
+        <h1>Danh sách Tàu</h1>
+    </div>
+
+    <div class="nav-buttons">
+        <a href="{% url 'them_tau' %}">Thêm Tàu</a>
+        <a href="{% url 'them_vat_tu' %}">Thêm Vật Tư</a>
+    </div>
+
     <div class="table-container">
         <table>
             <thead>
@@ -80,7 +211,7 @@
                     </td>
                     <td>{{ tau.tien_thue }}</td>
                     <td>{{ tau.tien_sau_thue }}</td>
-                    <td>
+                    <td class="actions">
                         <a href="{% url 'sua_tau' tau.ma_tau %}">Sửa</a>
                         <form action="{% url 'xoa_tau' tau.ma_tau %}" method="POST" style="display:inline;" onsubmit="return confirm('Bạn có chắc chắn muốn xóa tàu này?');">
                             {% csrf_token %}
@@ -109,7 +240,7 @@
                                     <td>{{ vat_tu.don_gia }}</td>
                                     <td>{{ vat_tu.he_so_cong }}</td>
                                     <td>{{ vat_tu.tien_vat_tu }}</td>
-                                    <td>
+                                    <td class="actions">
                                         <a href="{% url 'sua_vat_tu' vat_tu.id %}">Sửa</a>
                                         <form action="{% url 'xoa_vat_tu' vat_tu.id %}" method="POST" style="display:inline;" onsubmit="return confirm('Bạn có chắc chắn muốn xóa vật tư này?');">
                                             {% csrf_token %}

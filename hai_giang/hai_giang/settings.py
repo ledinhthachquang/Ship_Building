@@ -53,6 +53,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'tai_khoan.middleware.LoginRequiredMiddleware',
 ]
 
 ROOT_URLCONF = 'hai_giang.urls'
@@ -128,9 +129,10 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL = 'tai_khoan.NguoiDung'
-
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
 
+AUTH_USER_MODEL = 'tai_khoan.NguoiDung'
+LOGIN_URL = '/tai_khoan/login/'
+LOGIN_REDIRECT_URL = '/'

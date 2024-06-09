@@ -3,6 +3,18 @@ from django.db.models import Sum, F, DecimalField
 from decimal import Decimal
 from cham_cong.models import ChamCong
 from hoa_don.models import HoaDon, ChiTietHoaDon
+from django.contrib.auth.decorators import login_required
+import locale
+from num2words import num2words
+
+locale.setlocale(locale.LC_ALL, 'vi_VN.UTF-8')
+
+def format_currency(value):
+    return locale.format_string("%d", value, grouping=True)
+
+def read_number(value):
+    return num2words(value, lang='vi')
+
 
 def tinh_doanh_thu(hoa_don_list):
     tong_thu_tu_hoa_don = hoa_don_list.aggregate(Sum('chitiethoadon__tau__tien_sau_thue'))['chitiethoadon__tau__tien_sau_thue__sum'] or Decimal(0)
@@ -25,6 +37,7 @@ def tinh_doanh_thu(hoa_don_list):
 
     return tong_thu_tu_hoa_don, tong_luong_nhan_vien, tong_doanh_thu
 
+@login_required
 def trang_chu_quan_ly(request):
     hoa_don_list = HoaDon.objects.all()
 
@@ -70,7 +83,13 @@ def trang_chu_quan_ly(request):
             'tien_thue': tien_thue,
             'tien_sau_thue': tien_sau_thue,
             'chi_phi_luong': chi_phi_luong,
-            'doanh_thu': doanh_thu
+            'doanh_thu': doanh_thu,
+            'formatted_tong_tien': format_currency(tong_tien),
+            'formatted_tien_thue': format_currency(tien_thue),
+            'formatted_tien_sau_thue': format_currency(tien_sau_thue),
+            'formatted_chi_phi_luong': format_currency(chi_phi_luong),
+            'formatted_doanh_thu': format_currency(doanh_thu),
+            'read_doanh_thu': read_number(doanh_thu)
         })
 
     tong_thu_tu_hoa_don, tong_luong_nhan_vien, tong_doanh_thu = tinh_doanh_thu(hoa_don_list)
@@ -78,13 +97,15 @@ def trang_chu_quan_ly(request):
 
     return render(request, 'quan_ly/trang_chu.html', {
         'hoa_don_data': hoa_don_data,
-        'tong_thu_tu_hoa_don': tong_thu_tu_hoa_don,
-        'tong_luong_nhan_vien': tong_luong_nhan_vien,
-        'tong_doanh_thu': tong_doanh_thu,
+        'tong_thu_tu_hoa_don': format_currency(tong_thu_tu_hoa_don),
+        'tong_luong_nhan_vien': format_currency(tong_luong_nhan_vien),
+        'tong_doanh_thu': format_currency(tong_doanh_thu),
+        'read_tong_doanh_thu': read_number(tong_doanh_thu),
         'thang': thang,
         'nam': nam,
         'months': months,
     })
+
 
 
 

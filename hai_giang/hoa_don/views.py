@@ -6,6 +6,16 @@ from django.db.models import Sum, Q
 from datetime import datetime
 from weasyprint import HTML
 from django.http import HttpResponse, JsonResponse
+import locale
+from num2words import num2words
+
+locale.setlocale(locale.LC_ALL, 'vi_VN.UTF-8')
+
+def format_currency(value):
+    return locale.format_string("%d", value, grouping=True)
+
+def read_number(value):
+    return num2words(value, lang='vi')
 
 def trang_chu(request):
     chi_tiet_hoa_don = ChiTietHoaDon.objects.select_related('hoa_don', 'khach_hang', 'tau').all()
@@ -27,11 +37,23 @@ def trang_chu(request):
 
     months = range(1, 13)
 
+    formatted_chi_tiet_hoa_don = []
+    for chi_tiet in chi_tiet_hoa_don:
+        formatted_chi_tiet_hoa_don.append({
+            'hoa_don': chi_tiet.hoa_don,
+            'khach_hang': chi_tiet.khach_hang,
+            'tau': chi_tiet.tau,
+            'formatted_tien_truoc_thue': format_currency(chi_tiet.tau.tien_truoc_thue),
+            'formatted_tien_thue': format_currency(chi_tiet.tau.tien_thue),
+            'formatted_tien_sau_thue': format_currency(chi_tiet.tau.tien_sau_thue),
+        })
+
     return render(request, 'hoa_don/danh_sach_hoa_don.html', {
-        'chi_tiet_hoa_don': chi_tiet_hoa_don,
-        'tong_tien': tong_tien,
-        'tong_thue': tong_thue,
-        'tong_thanh_tien': tong_thanh_tien,
+        'chi_tiet_hoa_don': formatted_chi_tiet_hoa_don,
+        'tong_tien': format_currency(tong_tien),
+        'tong_thue': format_currency(tong_thue),
+        'tong_thanh_tien': format_currency(tong_thanh_tien),
+        'tong_thanh_tien_bang_chu': read_number(tong_thanh_tien),
         'thang': thang,
         'nam': nam,
         'months': months,
@@ -142,7 +164,7 @@ def in_hoa_don(request, id):
     return response
 
 def get_tau(request, tau_id):
-    tau = get_object_or_404(Tau, ma_tau=tau_id)  # Sử dụng ma_tau thay vì id
+    tau = get_object_or_404(Tau, ma_tau=tau_id)  
     data = {
         'ten_tau': tau.ten_tau,
         'dien_giai': tau.dien_giai,

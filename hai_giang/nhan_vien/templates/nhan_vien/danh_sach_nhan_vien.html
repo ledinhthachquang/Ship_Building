@@ -2,83 +2,254 @@
 <html>
 <head>
     <title>Danh sách Nhân viên</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
     <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 60vh;
+        }
+
+        .header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            margin-bottom: 60px;
+            width: 100%;
+            /* background-color: #007bff; */
+            color: black;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 2em;
+            text-align: center;
+        }
+
+        .back-button {
+            position: absolute;
+            top: 15px;
+            left: 20px;
+            display: inline-block;
+            padding: 10px;
+            background-color: #3498db;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .back-button:hover {
+            background-color: #2980b9;
+        }
+
         .input-form {
             display: flex;
             flex-direction: row;
-            align-items: flex-start;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
             padding: 10px;
+            gap: 15px;
+            max-width: 1200px;
+            margin-bottom: 20px;
         }
 
         .input-form label {
             margin-right: 10px;
+            font-weight: bold;
         }
 
         .input-form input, .input-form select {
-            margin-right: 10px;
+            padding: 10px;
+            border: 2px solid #3498db;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .input-form input:focus, .input-form select:focus {
+            border-color: #2980b9;
+        }
+
+        .input-form button {
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .input-form button:hover {
+            background-color: #2980b9;
         }
 
         .table-container {
+            width: 100%;
+            max-width: 1200px;
             margin-top: 20px;
+            animation: fadeIn 2s;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-        }
-
-        table, th, td {
-            border: 1px solid black;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            animation: fadeInUp 2s;
         }
 
         th, td {
-            padding: 10px;
+            padding: 15px;
             text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #3498db;
+            color: #fff;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .actions a, .actions button {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 5px;
+            color: #fff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .actions a {
+            background-color: #2ecc71;
+        }
+
+        .actions a:hover {
+            background-color: #27ae60;
+        }
+
+        .actions button {
+            background-color: #e74c3c;
+            border: none;
+            cursor: pointer;
+        }
+
+        .actions button:hover {
+            background-color: #c0392b;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
         }
     </style>
 </head>
 <body>
-    <h1>Danh sách Nhân viên</h1>
-    <a href="{% url 'trang_chu_quan_ly' %}">Quay về trang chính</a><br>
+    <a href="{% url 'trang_chu_quan_ly' %}" class="back-button"><i class="fas fa-arrow-left"></i></a>
+    <div class="header">
+        <h1>Danh sách Nhân viên</h1>
+    </div>
 
     <form method="POST" class="input-form">
         {% csrf_token %}
-        {{ form.as_p }}
+        <div>
+            <label for="ten_nhan_vien">Tên nhân viên:</label>
+            <input type="text" id="ten_nhan_vien" name="ten_nhan_vien">
+        </div>
+        <div>
+            <label for="que_quan">Quê quán:</label>
+            <input type="text" id="que_quan" name="que_quan">
+        </div>
+        <div>
+            <label for="so_cccd">Số CCCD:</label>
+            <input type="text" id="so_cccd" name="so_cccd">
+        </div>
+        <div>
+            <label for="dia_chi_thuong_tru">Địa chỉ thường trú:</label>
+            <input type="text" id="dia_chi_thuong_tru" name="dia_chi_thuong_tru">
+        </div>
+        <div>
+            <label for="chuc_vu">Chức vụ:</label>
+            <select id="chuc_vu" name="chuc_vu">
+                <option value="">---</option>
+                <option value="nhan_vien">Nhân viên</option>
+                <option value="ky_su">Kỹ sư</option>
+                <option value="quan_doc">Quản đốc</option>
+            </select>
+        </div>
         <button type="submit">Thêm Nhân viên</button>
     </form>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Mã nhân viên</th>
-                <th>Tên nhân viên</th>
-                <th>Quê quán</th>
-                <th>Số CCCD</th>
-                <th>Địa chỉ thường trú</th>
-                <th>Chức vụ</th>
-                <th>Hành động</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for nhan_vien in nhan_vien_list %}
-            <tr>
-                <td>{{ nhan_vien.ma_nhan_vien }}</td>
-                <td>{{ nhan_vien.ten_nhan_vien }}</td>
-                <td>{{ nhan_vien.que_quan }}</td>
-                <td>{{ nhan_vien.so_cccd }}</td>
-                <td>{{ nhan_vien.dia_chi_thuong_tru }}</td>
-                <td>{{ nhan_vien.get_chuc_vu_display }}</td>
-                <td>
-                    <a href="{% url 'sua_nhan_vien' nhan_vien.ma_nhan_vien %}">Sửa</a>
-                    <form action="{% url 'xoa_nhan_vien' nhan_vien.ma_nhan_vien %}" method="POST" style="display:inline;" onsubmit="return confirm('Bạn có chắc chắn muốn xóa nhân viên này?');">
-                        {% csrf_token %}
-                        <button type="submit">Xóa</button>
-                    </form>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Mã nhân viên</th>
+                    <th>Tên nhân viên</th>
+                    <th>Quê quán</th>
+                    <th>Số CCCD</th>
+                    <th>Địa chỉ thường trú</th>
+                    <th>Chức vụ</th>
+                    <th>Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for nhan_vien in nhan_vien_list %}
+                <tr>
+                    <td>{{ nhan_vien.ma_nhan_vien }}</td>
+                    <td>{{ nhan_vien.ten_nhan_vien }}</td>
+                    <td>{{ nhan_vien.que_quan }}</td>
+                    <td>{{ nhan_vien.so_cccd }}</td>
+                    <td>{{ nhan_vien.dia_chi_thuong_tru }}</td>
+                    <td>{{ nhan_vien.get_chuc_vu_display }}</td>
+                    <td class="actions">
+                        <a href="{% url 'sua_nhan_vien' nhan_vien.ma_nhan_vien %}">Sửa</a>
+                        <form action="{% url 'xoa_nhan_vien' nhan_vien.ma_nhan_vien %}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa nhân viên này?');">
+                            {% csrf_token %}
+                            <button type="submit">Xóa</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </body>
-</html>
 </html>

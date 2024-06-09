@@ -1,6 +1,7 @@
 from django.urls import path
-from .views import dang_nhap, trang_chu
+from . import views
 
 urlpatterns = [
-    path('dang_nhap/', dang_nhap, name='dang_nhap'),
+    path('login/', views.login_view, name='login'),
+    path('logout/', views.logout_view, name='logout'),
 ]
